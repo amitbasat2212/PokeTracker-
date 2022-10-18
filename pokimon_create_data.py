@@ -32,27 +32,41 @@ def create_pokimon(id,name,type,height,weight):
         print(e)
 
 
+
+
+
 def create_trainer(name,town):
     try:
         with connection.cursor() as cursor:
-            insert_trainer = f"INSERT INTO trainer(name_trainer,town) values('{name}','{town}')"            
+            insert_trainer = f"INSERT IGNORE INTO trainer(name_trainer,town) values('{name}','{town}')"            
+            cursor.execute(insert_trainer)
+            connection.commit()
+    except TypeError as e:
+        print(e)
+
+def create_trainer_pokimon(name_trainer,id_pokimon):
+    try:
+        with connection.cursor() as cursor:
+            insert_trainer = f"INSERT IGNORE INTO trainer_pokemon values('{name_trainer}',{id_pokimon})"            
             cursor.execute(insert_trainer)
             connection.commit()
     except TypeError as e:
         print(e)
 
 
-
 def create_all_the_data_about_pokimons():
     for pokimon in pokimon_data_fetures:
-        create_pokimon(pokimon["id"],
-        pokimon["name"],
-        pokimon["type"],
-        pokimon["height"],
-        pokimon["weight"])
-        for trainer in pokimon["ownedBy"]:
-            create_trainer(trainer["name"],trainer["town"])          
+                create_pokimon(pokimon["id"],
+                pokimon["name"],
+                pokimon["type"],
+                pokimon["height"],
+                pokimon["weight"])
+                for trainer in pokimon["ownedBy"]:                    
+                    create_trainer(trainer["name"],trainer["town"])
+                    create_trainer_pokimon(trainer["name"],pokimon["id"])
 
+
+   
    
     
 
