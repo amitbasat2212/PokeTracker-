@@ -16,30 +16,31 @@ def find_the_haviest_pokimon():
             result = cursor.fetchall()
             return result;
     except TypeError as e:
-        print(e)
+        return e;
 
 
 
 
 
-def findByType(types_pokimon):
+
+def find_by_type(types_pokimon):
     try:
         with connection.cursor() as cursor:            
-            query_types_of_pokimon = f"SELECT po.name_pokemon FROM pokemon as po,typepokemon_pokemon as ty WHERE ty.pokemon_id=po.id AND ty.type_name='{types_pokimon}';"
-            cursor.execute(query_types_of_pokimon)        
-            result_types_of_pokimon = cursor.fetchall()                                  
+            query_pokimon_by_types = f"SELECT po.name_pokemon FROM pokemon as po,typepokemon_pokemon as ty WHERE ty.pokemon_id=po.id AND ty.type_name='{types_pokimon}';"
+            cursor.execute(query_pokimon_by_types)        
+            result_pokimon_by_type = cursor.fetchall()                                  
             list_of_pokimon_types=[];            
             
-            for trainer in result_types_of_pokimon:
-                 list_of_pokimon_types.append(trainer["trainer_name"])               
+            for pokimon in result_pokimon_by_type:
+                 list_of_pokimon_types.append(pokimon["name_pokemon"])               
            
             return list_of_pokimon_types;
    
     except TypeError as e:
-        print(e)
+        return e;
 
 
-# print(find_the_haviest_pokimon());  
+
 
 def find_trainers_of_pokimon(pokimon_name):
     try:
@@ -55,12 +56,12 @@ def find_trainers_of_pokimon(pokimon_name):
             return list_of_trainer_names;
    
     except TypeError as e:
-        print(e)
+        return e;
 
 
 
 
-def findRoster(name_trainer):
+def find_pokimons_of_trainer(name_trainer):
     try:
         with connection.cursor() as cursor:            
             query_pokimon_names = f"SELECT po.name_pokemon FROM pokemon as po,trainer_pokemon as tp WHERE po.id=tp.pokemon_id AND tp.trainer_name='{name_trainer}' ;"
@@ -69,14 +70,25 @@ def findRoster(name_trainer):
                        
             list_of_pokimon_names=[];            
             
-            for trainer in result_pokimon_names:
-                 list_of_pokimon_names.append(trainer["name_pokemon"])               
+            for pokimon in result_pokimon_names:
+                 list_of_pokimon_names.append(pokimon["name_pokemon"])               
            
             return list_of_pokimon_names;
    
     except TypeError as e:
-        print(e)
+        return e;
 
+
+
+
+def delete_pokimon_from_trainer(trainer_name,pokimon_id):
+    try:
+        with connection.cursor() as cursor:            
+            delete_pokimon_from_trainer = f"Delete from trainer_pokemon where trainer_name='{trainer_name} AND pokemon_id='{pokimon_id}'  ;"
+            cursor.execute(delete_pokimon_from_trainer)
+            connection.commit()
    
+    except TypeError as e:
+        return e;
 
-print(findByType("grass"))
+

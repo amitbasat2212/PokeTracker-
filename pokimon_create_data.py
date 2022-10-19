@@ -9,7 +9,7 @@ connection = pymysql.connect(
     cursorclass=pymysql.cursors.DictCursor
 )
 
-pokimon_data_json = open('PokeTracker-\pokimon.json')
+pokimon_data_json = open('pokimon.json')
 pokimon_data_fetures = json.load(pokimon_data_json);
 
 
