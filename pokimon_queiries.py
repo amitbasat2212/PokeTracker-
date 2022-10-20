@@ -19,6 +19,15 @@ def find_the_haviest_pokimon():
         return e;
 
 
+def find_pokimon_by_id(pokimon_id):
+    try:
+        with connection.cursor() as cursor:
+            query_haviest_pokimon = f"SELECT * FROM pokemon WHERE id={pokimon_id} ;"
+            cursor.execute(query_haviest_pokimon)        
+            result = cursor.fetchall()
+            return result;
+    except TypeError as e:
+        return e;
 
 
 
@@ -91,4 +100,14 @@ def delete_pokimon_from_trainer(trainer_name,pokimon_id):
     except TypeError as e:
         return e;
 
+def find_id_pokimon_by_name(pokimon_name):
+      try:
+        with connection.cursor() as cursor:            
+            query_pokimon_names = f"SELECT id FROM pokemon WHERE name_pokemon='{pokimon_name}';"
+            cursor.execute(query_pokimon_names)        
+            result_pokimon_id = cursor.fetchall() 
+            return result_pokimon_id[0]["id"];         
+      except TypeError as e:
+        return e;
 
+                       

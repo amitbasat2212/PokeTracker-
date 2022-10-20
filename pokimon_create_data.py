@@ -9,11 +9,11 @@ connection = pymysql.connect(
     cursorclass=pymysql.cursors.DictCursor
 )
 
-pokimon_data_json = open('pokimon.json')
-pokimon_data_fetures = json.load(pokimon_data_json);
+# pokimon_data_json = open('pokimon.json')
+# pokimon_data_fetures = json.load(pokimon_data_json);
 
 
-mycursor = connection.cursor()
+# mycursor = connection.cursor()
 
 # sql_trainer = "DELETE FROM trainer_pokemon"
 # mycursor.execute(sql_trainer)
@@ -48,34 +48,22 @@ def create_pokimon(id,name,height,weight):
 
 def create_type(types_pokimon):
     try:
-        with connection.cursor() as cursor:
-           if isinstance(types_pokimon, list):
-            for type in types_pokimon:
-                insert_type_pokimon = f"INSERT IGNORE INTO typepokemon values('{type}')"
-                cursor.execute(insert_type_pokimon)
-                connection.commit()
-           else:
+        with connection.cursor() as cursor:           
                 insert_type_pokimon = f"INSERT IGNORE INTO typepokemon values('{types_pokimon}')"
                 cursor.execute(insert_type_pokimon)
                 connection.commit()
-               
+           
     except TypeError as e:
         print(e)
 
 
 def create_type_pokimon_to_pokimon(types_pokimon,id_pokimon):
     try:
-        with connection.cursor() as cursor:
-            if isinstance(types_pokimon, list):
-                for type in types_pokimon:
-                    insert_type_pokimon = f"INSERT IGNORE INTO typepokemon_pokemon values('{type}',{id_pokimon})"
-                    cursor.execute(insert_type_pokimon)
-                    connection.commit()
+        with connection.cursor() as cursor:           
+           insert_type_pokimon = f"INSERT IGNORE INTO typepokemon_pokemon values('{types_pokimon}',{id_pokimon})"
+           cursor.execute(insert_type_pokimon)
+           connection.commit()          
             
-            else:
-                    insert_type_pokimon = f"INSERT IGNORE INTO typepokemon_pokemon values('{types_pokimon}',{id_pokimon})"
-                    cursor.execute(insert_type_pokimon)
-                    connection.commit() 
 
     except TypeError as e:
         print(e)
@@ -100,22 +88,21 @@ def create_trainer_pokimon(name_trainer,id_pokimon):
         print(e)
 
 
-def create_all_the_data_about_pokimons():
-    for pokimon in pokimon_data_fetures:
-                create_pokimon(pokimon["id"],
-                pokimon["name"],                
-                pokimon["height"],
-                pokimon["weight"])
+# def create_all_the_data_about_pokimons():
+#     for pokimon in pokimon_data_fetures:
+#                 create_pokimon(pokimon["id"],
+#                 pokimon["name"],                
+#                 pokimon["height"],
+#                 pokimon["weight"])
                 
-                create_type(pokimon["type"])
-                create_type_pokimon_to_pokimon(pokimon["type"],pokimon["id"])
-                for trainer in pokimon["ownedBy"]:                    
-                    create_trainer(trainer["name"],trainer["town"])
-                    create_trainer_pokimon(trainer["name"],pokimon["id"])
+#                 create_type(pokimon["type"])
+#                 create_type_pokimon_to_pokimon(pokimon["type"],pokimon["id"])
+#                 for trainer in pokimon["ownedBy"]:                    
+#                     create_trainer(trainer["name"],trainer["town"])
+#                     create_trainer_pokimon(trainer["name"],pokimon["id"])
                    
 
 
-
-create_all_the_data_about_pokimons()
+#create_all_the_data_about_pokimons()
 
     
