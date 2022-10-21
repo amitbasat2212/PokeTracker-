@@ -1,8 +1,8 @@
 import json
 from Database.DataBaseManager import connection
 
-# pokimon_data_json = open('pokimon.json')
-# pokimon_data_fetures = json.load(pokimon_data_json);
+pokimon_data_json = open('pokimon.json')
+pokimon_data_fetures = json.load(pokimon_data_json);
 
 
 # mycursor = connection.cursor()
@@ -80,21 +80,21 @@ def create_trainer_pokimon(name_trainer,id_pokimon):
         print(e)
 
 
-# def create_all_the_data_about_pokimons():
-#     for pokimon in pokimon_data_fetures:
-#                 create_pokimon(pokimon["id"],
-#                 pokimon["name"],                
-#                 pokimon["height"],
-#                 pokimon["weight"])
+def create_all_the_data_about_pokimons():
+    for pokimon in pokimon_data_fetures:
+                create_pokimon(pokimon["id"],
+                pokimon["name"],                
+                pokimon["height"],
+                pokimon["weight"])
                 
-#                 create_type(pokimon["type"])
-#                 create_type_pokimon_to_pokimon(pokimon["type"],pokimon["id"])
-#                 for trainer in pokimon["ownedBy"]:                    
-#                     create_trainer(trainer["name"],trainer["town"])
-#                     create_trainer_pokimon(trainer["name"],pokimon["id"])
+                create_type(pokimon["type"])
+                create_type_pokimon_to_pokimon(pokimon["type"],pokimon["id"])
+                for trainer in pokimon["ownedBy"]:                    
+                    create_trainer(trainer["name"],trainer["town"])
+                    create_trainer_pokimon(trainer["name"],pokimon["id"])
                    
 
 
-# create_all_the_data_about_pokimons()
+create_all_the_data_about_pokimons()
 
     
