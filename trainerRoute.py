@@ -1,7 +1,8 @@
 
-from fastapi import FastAPI,APIRouter
+from fastapi import APIRouter,HTTPException
 import pokimon_queiries as pq;
 import pokimon_create_data as pc
+import ErrorHandling;
 import json;
 
 router = APIRouter()
@@ -17,6 +18,9 @@ async def get_trainers_of_pokimon(pokimon_name):
 @router.post('/trainers/', status_code=201)
 async def add_trainer(name,town):
     try:
+        if(name.isnumeric() and town.isnumeric()):
+            return ErrorHandling.params_incorrect("name","town");
+
         pc.create_trainer(name,town);
         new_trainer = {"name":name,"town":town}
         return new_trainer
@@ -25,8 +29,11 @@ async def add_trainer(name,town):
 
 
 @router.delete('/trainers/{trainer_name}/pokimons/{pokimon_id}', status_code=200)
-async def get_pokimon_from_trainer(trainer_name,pokimon_id):
+async def delete_pokimon_from_trainer(trainer_name,pokimon_id):
     try:
+        if(trainer_name.isnumeric() and not pokimon_id.isnumeric()):
+            return ErrorHandling.params_incorrect("trainer_name","pokimon_id");
+
         pq.delete_pokimon_from_trainer(trainer_name,pokimon_id)
         delete_trainer = {"trainer_name":trainer_name,"pokimon_id":pokimon_id}
         return delete_trainer;

@@ -1,17 +1,22 @@
 
-from fastapi import FastAPI,APIRouter
+from itertools import chain
+from fastapi import APIRouter
 import requests;
 import pokimon_queiries as pq;
 import pokimon_create_data as pc
 import url_api_request
+import ErrorHandling
 
-app = FastAPI()
+
 router = APIRouter()
 
 #pokimon
 @router.get('/pokimons/', status_code=200)
 async def get_pokemons_by_trainer(trainer_name):
     try:
+        if(trainer_name.isnumeric()):
+            return ErrorHandling.the_param_incorrect("trainer_name");
+
         return pq.find_pokimons_of_trainer(trainer_name);
     except TypeError as e:
         return e;
@@ -20,6 +25,9 @@ async def get_pokemons_by_trainer(trainer_name):
 @router.get('/pokimons/type/', status_code=200)
 async def get_pokemons_by_type(type):
     try:
+        if(type.isnumeric()):
+            return ErrorHandling.the_param_incorrect("type");
+
         return pq.find_by_type(type);
     except TypeError as e:
         return e;
@@ -48,14 +56,13 @@ def create_types_for_pokimon(pokimon_type,pokimon_id):
 async def get_pokimon(pokimon_name):
     try:
        pokimon_details_json = request_pokimon_detailes(pokimon_name)
-      
+
        pokimon_type = pokimon_details_json["types"];
        
        pokimon_id = pq.find_id_pokimon_by_name(pokimon_name);       
        create_types_for_pokimon(pokimon_type,pokimon_id)         
        pokimon_details = pq.find_pokimon_by_id(pokimon_id);
-       return pokimon_details; 
-         
+       return pokimon_details;          
     
     except TypeError as e:
         return e;
@@ -80,17 +87,51 @@ def request_evolotion_detailes(pokimon_evolution_chain_url):
         url_api_request.get_detailes_acording_to_url_from_pockimon);    
     return pokimon_evoulotion;     
 
-@router.get('/evolve', status_code=200)
-async def evolve_pokimon(pokimon_name):
+
+
+def evolve_the_pokimon(pokimon_chain_evolotion,pokimon_name):
+    chain = pokimon_chain_evolotion["chain"]
+    evolotion_of_pokimon =chain
+    the_evolve_name=0;
+    for _ in range(2):            
+        if(evolotion_of_pokimon["species"]["name"]==pokimon_name):
+            the_evolve_species =evolotion_of_pokimon["evolves_to"][0]["species"]     
+            the_evolve_name=the_evolve_species["name"]
+        else:
+            evolotion_of_pokimon=chain["evolves_to"][0]
+
+    return the_evolve_name;
+
+
+def delete_old_pokimon_after_evolve(pokimon_name,trainer_name):
+    old_pokimon_id= pq.find_id_pokimon_by_name(pokimon_name);
+    pq.delete_pokimon_from_trainer(trainer_name,old_pokimon_id)
+
+def add_new_pokimon_after_evolve(pokimon_name,trainer_name):    
+    pokimon_evolve_id = pq.find_id_pokimon_by_name(pokimon_name);
+    pc.create_trainer_pokimon(trainer_name,pokimon_evolve_id);
+    return pokimon_evolve_id;
+
+
+
+@router.post('/evolve', status_code=200)
+async def evolve_pokimon(pokimon_name,trainer_name):
     try:
         pokimon_detailes = request_pokimon_detailes(pokimon_name)   
         
         pokimon_evolution_chain_url = request_pokimon_evolotion_url(pokimon_detailes)
                         
         pokimon_evoulotion = request_evolotion_detailes(pokimon_evolution_chain_url)
-         
-        return pokimon_evoulotion["chain"]["evolves_to"]
+        the_evolve_name_of_pokimon = evolve_the_pokimon(pokimon_evoulotion,pokimon_name)
+       
+        if(the_evolve_name_of_pokimon!=0):           
+            delete_old_pokimon_after_evolve(pokimon_name,trainer_name)        
+            pokimon_evolve_id=add_new_pokimon_after_evolve(the_evolve_name_of_pokimon,trainer_name)
+        else:
+             return ErrorHandling.the_evolve_finished();        
 
+        return {"trainer_name":trainer_name,"pokimon_id":pokimon_evolve_id}
+ 
     except TypeError as e:
         return e;
 
