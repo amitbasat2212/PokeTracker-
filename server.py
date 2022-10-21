@@ -1,3 +1,4 @@
+
 from urllib import response
 from fastapi import FastAPI
 
@@ -5,8 +6,8 @@ app = FastAPI()
 
 import uvicorn
 
-import pokimonsRoute
-import trainerRoute
+from Routes import pokimonsRoute;
+from Routes import trainerRoute;
 
 app.include_router(pokimonsRoute.router)
 app.include_router(trainerRoute.router)

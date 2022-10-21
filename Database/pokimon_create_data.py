@@ -1,5 +1,5 @@
 import json
-from DataBaseManager import connection
+from Database.DataBaseManager import connection
 
 # pokimon_data_json = open('pokimon.json')
 # pokimon_data_fetures = json.load(pokimon_data_json);

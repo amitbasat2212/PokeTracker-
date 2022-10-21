@@ -1,9 +1,9 @@
 
-from fastapi import APIRouter,HTTPException
-import pokimon_queiries as pq;
-import pokimon_create_data as pc
-import ErrorHandling;
-import json;
+from fastapi import APIRouter
+from Database import pokimon_queiries as pq;
+from Database import pokimon_create_data as pc
+from Routes import ErrorHandling
+
 
 router = APIRouter()
 

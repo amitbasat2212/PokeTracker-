@@ -1,4 +1,4 @@
-from DataBaseManager import connection
+from Database.DataBaseManager import connection
 
 def find_the_haviest_pokimon():
     try:

@@ -1,11 +1,11 @@
 
-from itertools import chain
+
 from fastapi import APIRouter
 import requests;
-import pokimon_queiries as pq;
-import pokimon_create_data as pc
-import url_api_request
-import ErrorHandling
+from Database import pokimon_queiries as pq;
+from Database import pokimon_create_data as pc
+from consts import url_api_request
+from Routes import ErrorHandling
 
 
 router = APIRouter()
