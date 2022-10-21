@@ -1,12 +1,4 @@
-import pymysql 
-connection = pymysql.connect(
-    host="localhost",
-    user="root",
-    password="",
-    db="poketracker",
-    charset="utf8",
-    cursorclass=pymysql.cursors.DictCursor
-)
+from DataBaseManager import connection
 
 def find_the_haviest_pokimon():
     try:
@@ -101,13 +93,13 @@ def delete_pokimon_from_trainer(trainer_name,pokimon_id):
         return e;
 
 def find_id_pokimon_by_name(pokimon_name):
-      try:
-        with connection.cursor() as cursor:            
-            query_pokimon_names = f"SELECT id FROM pokemon WHERE name_pokemon='{pokimon_name}';"
-            cursor.execute(query_pokimon_names)        
-            result_pokimon_id = cursor.fetchall() 
-            return result_pokimon_id[0]["id"];         
-      except TypeError as e:
-        return e;
+        try:
+            with connection.cursor() as cursor:            
+                query_pokimon_names = f"SELECT id FROM pokemon WHERE name_pokemon='{pokimon_name}';"
+                cursor.execute(query_pokimon_names)        
+                result_pokimon_id = cursor.fetchall() 
+                return result_pokimon_id[0]["id"];         
+        except TypeError as e:
+            return e;
 
                        

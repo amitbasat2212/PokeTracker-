@@ -1,13 +1,5 @@
 import json
-import pymysql 
-connection = pymysql.connect(
-    host="localhost",
-    user="root",
-    password="",
-    db="poketracker",
-    charset="utf8",
-    cursorclass=pymysql.cursors.DictCursor
-)
+from DataBaseManager import connection
 
 # pokimon_data_json = open('pokimon.json')
 # pokimon_data_fetures = json.load(pokimon_data_json);
@@ -103,6 +95,6 @@ def create_trainer_pokimon(name_trainer,id_pokimon):
                    
 
 
-#create_all_the_data_about_pokimons()
+# create_all_the_data_about_pokimons()
 
     
