@@ -33,9 +33,13 @@ async def get_pokemons_by_type(type):
         return e;
 
 
+
+
 def request_from_pokeApi_for_pokimon_detailes(pokimon_name,url,callback):
-    pokimon_details = requests.get(callback(pokimon_name,url))
-    pokimon_details_json =pokimon_details.json()
+    pokimon_details = requests.get(callback(pokimon_name,url))   
+    if(pokimon_details.status_code!=200):
+        return {}
+    pokimon_details_json =pokimon_details.json()   
     return pokimon_details_json
 
 def request_from_pokeApi_for_evolotion(url,callback):
@@ -105,7 +109,9 @@ def evolve_the_pokimon(pokimon_chain_evolotion,pokimon_name):
 
 def delete_old_pokimon_after_evolve(pokimon_name,trainer_name):
     old_pokimon_id= pq.find_id_pokimon_by_name(pokimon_name);
-    pq.delete_pokimon_from_trainer(trainer_name,old_pokimon_id)
+    the_delete_row=pq.delete_pokimon_from_trainer(trainer_name,old_pokimon_id)
+    return the_delete_row;
+
 
 def add_new_pokimon_after_evolve(pokimon_name,trainer_name):    
     pokimon_evolve_id = pq.find_id_pokimon_by_name(pokimon_name);
@@ -113,20 +119,28 @@ def add_new_pokimon_after_evolve(pokimon_name,trainer_name):
     return pokimon_evolve_id;
 
 
+    
+        
 
-@router.post('/evolve', status_code=200)
+
+@router.post('/evolve/', status_code=200)
 async def evolve_pokimon(pokimon_name,trainer_name):
     try:
-        pokimon_detailes = request_pokimon_detailes(pokimon_name)   
+        pokimon_detailes = request_pokimon_detailes(pokimon_name)  
+        if pokimon_detailes=={}:
+            return ErrorHandling.the_param_incorrect("pokimon_name") 
         
         pokimon_evolution_chain_url = request_pokimon_evolotion_url(pokimon_detailes)
                         
         pokimon_evoulotion = request_evolotion_detailes(pokimon_evolution_chain_url)
         the_evolve_name_of_pokimon = evolve_the_pokimon(pokimon_evoulotion,pokimon_name)
        
-        if(the_evolve_name_of_pokimon!=0):           
-            delete_old_pokimon_after_evolve(pokimon_name,trainer_name)        
-            pokimon_evolve_id=add_new_pokimon_after_evolve(the_evolve_name_of_pokimon,trainer_name)
+        if(the_evolve_name_of_pokimon!=0):          
+            delete_row = delete_old_pokimon_after_evolve(pokimon_name,trainer_name)        
+            if(delete_row!={}):
+                pokimon_evolve_id=add_new_pokimon_after_evolve(the_evolve_name_of_pokimon,trainer_name)
+            else:
+                return ErrorHandling.the_row_dosent_excit();
         else:
              return ErrorHandling.the_evolve_finished();        
 

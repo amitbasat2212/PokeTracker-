@@ -72,14 +72,34 @@ def find_pokimons_of_trainer(name_trainer):
         return e;
 
 
+def find_pokimon_to_trainer_by_id_and_name(trainer_name,id_pokimon):
+    try:
+        with connection.cursor() as cursor:            
+            query_excist_pokimon_from_trainer = f"SELECT * from trainer_pokemon where trainer_name='{trainer_name}' AND pokemon_id={id_pokimon} ;"
+            cursor.execute(query_excist_pokimon_from_trainer)            
+            result_pokimon = cursor.fetchall()                                 
+            if(len(result_pokimon)==0):
+                return False;
+            return True;
+            
+   
+    except TypeError as e:
+        return e;
+
 
 
 def delete_pokimon_from_trainer(trainer_name,pokimon_id):
     try:
-        with connection.cursor() as cursor:            
-            delete_pokimon_from_trainer = f"Delete from trainer_pokemon where trainer_name='{trainer_name}' AND pokemon_id={pokimon_id} ;"
-            cursor.execute(delete_pokimon_from_trainer)
-            connection.commit()
+        with connection.cursor() as cursor: 
+            if_row_excist = find_pokimon_to_trainer_by_id_and_name(trainer_name,pokimon_id)           
+            if(if_row_excist):
+                delete_pokimon_from_trainer = f"Delete from trainer_pokemon where trainer_name='{trainer_name}' AND pokemon_id={pokimon_id} ;"
+                cursor.execute(delete_pokimon_from_trainer)
+                connection.commit()
+                return {"trainer_name":trainer_name,"pokimon_id":pokimon_id}
+            
+            return {}
+
    
     except TypeError as e:
         return e;
