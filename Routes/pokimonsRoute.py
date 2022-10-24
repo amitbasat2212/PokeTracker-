@@ -52,7 +52,8 @@ def request_from_pokeApi_for_evolotion(url,callback):
 def create_types_for_pokimon(pokimon_type,pokimon_id):
     for type in pokimon_type:
           pc.create_type_pokimon_to_pokimon(type["type"]["name"],pokimon_id)  
-       
+
+    return{"type_name":pokimon_type,"pokimon_id":pokimon_id}        
 
 
 
