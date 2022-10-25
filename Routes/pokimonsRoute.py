@@ -60,6 +60,9 @@ def create_types_for_pokimon(pokimon_type,pokimon_id):
 @router.get('/pokimons/{pokimon_name}', status_code=200)
 async def get_pokimon(pokimon_name):
     try:
+       if(pokimon_name.isnumeric()):
+           return ErrorHandling.the_param_incorrect("pokimon_name");
+
        pokimon_details_json = request_pokimon_detailes(pokimon_name)
 
        pokimon_type = pokimon_details_json["types"];
@@ -127,7 +130,7 @@ def add_new_pokimon_after_evolve(pokimon_name,trainer_name):
 @router.post('/evolve/', status_code=200)
 async def evolve_pokimon(pokimon_name,trainer_name):
     try:
-        pokimon_detailes = request_pokimon_detailes(pokimon_name)  
+        pokimon_detailes = request_pokimon_detailes(pokimon_name)        
         if pokimon_detailes=={}:
             return ErrorHandling.the_param_incorrect("pokimon_name") 
         
@@ -135,7 +138,7 @@ async def evolve_pokimon(pokimon_name,trainer_name):
                         
         pokimon_evoulotion = request_evolotion_detailes(pokimon_evolution_chain_url)
         the_evolve_name_of_pokimon = evolve_the_pokimon(pokimon_evoulotion,pokimon_name)
-       
+
         if(the_evolve_name_of_pokimon!=0):          
             delete_row = delete_old_pokimon_after_evolve(pokimon_name,trainer_name)        
             if(delete_row!={}):

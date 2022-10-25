@@ -114,4 +114,44 @@ def find_id_pokimon_by_name(pokimon_name):
         except TypeError as e:
             return e;
 
-                       
+
+
+
+
+def find_pokimon_types_by_id(pokimons):
+    try:
+            with connection.cursor() as cursor: 
+                pokimons_type=[]
+                for pokimon in pokimons:
+                    pokimon_id = find_id_pokimon_by_name(pokimon)
+                    pokimon_type_query = f"SELECT type_name FROM typepokemon_pokemon WHERE pokemon_id='{pokimon_id}'"
+                    cursor.execute(pokimon_type_query)        
+                    pokimon_types = cursor.fetchall()
+                    for type in pokimon_types:
+                        pokimons_type.append(type["type_name"])
+                   
+                return pokimons_type    
+    except TypeError as e:
+            return e;
+
+def find_if_trainer_has_pokimon_with_same_type(trainer_name,pokimon_name):
+    try:
+            with connection.cursor() as cursor: 
+                pokimon_id = find_id_pokimon_by_name(pokimon_name);
+                pokimon_type_query = f"SELECT type_name FROM typepokemon_pokemon WHERE pokemon_id='{pokimon_id}'"
+                cursor.execute(pokimon_type_query)        
+                pokimon_type = cursor.fetchall()
+                pokimons_of_trainer = find_pokimons_of_trainer(trainer_name);  
+                pokimons_of_trainer_types = find_pokimon_types_by_id(pokimons_of_trainer);              
+
+                for pokimon in pokimon_type:
+                    if pokimon["type_name"] in pokimons_of_trainer_types:
+                        return True;
+
+                return False;    
+
+                 
+    except TypeError as e:
+            return e;
+
+
