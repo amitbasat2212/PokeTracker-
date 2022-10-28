@@ -34,6 +34,7 @@ def create_pokimon(id,name,height,weight):
             insert_pokimon = f"INSERT IGNORE INTO pokemon values({id},'{name}',{height},{weight})"
             cursor.execute(insert_pokimon)
             connection.commit()
+            return {"id":id,"name":name,"height":height,"weight":weight}
     except TypeError as e:
         print(e)
 
@@ -69,6 +70,9 @@ def create_trainer(name,town):
             connection.commit()
     except TypeError as e:
         print(e)
+
+
+
 
 def create_trainer_pokimon(name_trainer,id_pokimon):
     try:

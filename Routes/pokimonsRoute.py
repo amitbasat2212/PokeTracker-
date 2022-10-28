@@ -103,6 +103,9 @@ def evolve_the_pokimon(pokimon_chain_evolotion,pokimon_name):
     the_evolve_name=0;
     for _ in range(2):            
         if(evolotion_of_pokimon["species"]["name"]==pokimon_name):
+            if(evolotion_of_pokimon["evolves_to"]==[]):
+                return the_evolve_name;
+            
             the_evolve_species =evolotion_of_pokimon["evolves_to"][0]["species"]     
             the_evolve_name=the_evolve_species["name"]
         else:
@@ -123,17 +126,28 @@ def add_new_pokimon_after_evolve(pokimon_name,trainer_name):
     return pokimon_evolve_id;
 
 
-    
+
+@router.post("/pokimons/")
+def add_pokimon(pokimon_name):
+    pokimon_detailes = request_pokimon_detailes(pokimon_name)        
+    if pokimon_detailes=={}:
+        return ErrorHandling.the_param_incorrect("pokimon_name")
+        
+    new_pokimon =pc.create_pokimon(pokimon_detailes["id"],pokimon_detailes["name"],pokimon_detailes["height"],pokimon_detailes["weight"])
+    return new_pokimon     
+        
         
 
 
 @router.post('/evolve/', status_code=200)
 async def evolve_pokimon(pokimon_name,trainer_name):
     try:
+
         pokimon_detailes = request_pokimon_detailes(pokimon_name)        
         if pokimon_detailes=={}:
             return ErrorHandling.the_param_incorrect("pokimon_name") 
-        
+        if(pq.find_if_trainer_has_pokimon_with_same_type(trainer_name,pokimon_name)):
+            return ErrorHandling.the_same_type()
         pokimon_evolution_chain_url = request_pokimon_evolotion_url(pokimon_detailes)
                         
         pokimon_evoulotion = request_evolotion_detailes(pokimon_evolution_chain_url)

@@ -6,7 +6,11 @@ def params_incorrect(param1,param2):
         content={"message":f"the {param1} and {param2} incorrect"},
     )
 
-    
+def the_same_type():
+    return JSONResponse(
+        status_code=400,
+        content={"message":f"the trainer alredy have one eith this type"},
+)     
 
 
 def the_param_incorrect(param):
