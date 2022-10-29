@@ -1,9 +1,10 @@
 
 from fastapi import APIRouter
+from requests import request
 from Database import pokimon_queiries as pq;
 from Database import pokimon_create_data as pc
 from Routes import ErrorHandling
-
+from fastapi import Request
 
 router = APIRouter()
 
@@ -16,13 +17,14 @@ async def get_trainers_of_pokimon(pokimon_name):
         return e;
 
 @router.post('/trainers/', status_code=201)
-async def add_trainer(name,town):
+async def add_trainer(request: Request):
     try:
-        if(name.isnumeric() and town.isnumeric()):
+        trainer =await request.json()
+        if(trainer["name"].isnumeric() and trainer["town"].isnumeric()):
             return ErrorHandling.params_incorrect("name","town");
 
-        pc.create_trainer(name,town);
-        new_trainer = {"name":name,"town":town}
+        pc.create_trainer(trainer["name"],trainer["town"]);
+        new_trainer = {"name":trainer["name"],"town":trainer["town"]}
         return new_trainer
     except TypeError as e:
         return e;
