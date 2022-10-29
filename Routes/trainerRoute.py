@@ -24,7 +24,7 @@ async def add_trainer(request: Request):
             return ErrorHandling.params_incorrect("name","town");
 
         pc.create_trainer(trainer["name"],trainer["town"]);
-        new_trainer = {"name":trainer["name"],"town":trainer["town"]}
+        new_trainer = {"name":trainer["name"],"town":trainer[""]}
         return new_trainer
     except TypeError as e:
         return e;

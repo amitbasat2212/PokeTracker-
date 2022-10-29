@@ -52,7 +52,8 @@ def create_type(types_pokimon):
 
 def create_type_pokimon_to_pokimon(types_pokimon,id_pokimon):
     try:
-        with connection.cursor() as cursor:           
+        with connection.cursor() as cursor:       
+           create_type(types_pokimon)     
            insert_type_pokimon = f"INSERT IGNORE INTO typepokemon_pokemon values('{types_pokimon}',{id_pokimon})"
            cursor.execute(insert_type_pokimon)
            connection.commit()          

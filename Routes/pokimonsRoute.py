@@ -69,7 +69,9 @@ async def get_pokimon(pokimon_name):
        
        pokimon_id = pq.find_id_pokimon_by_name(pokimon_name);       
        create_types_for_pokimon(pokimon_type,pokimon_id)         
+       
        pokimon_details = pq.find_pokimon_by_id(pokimon_id);
+       
        return pokimon_details;          
     
     except TypeError as e:
@@ -132,8 +134,14 @@ def add_pokimon(pokimon_name):
     pokimon_detailes = request_pokimon_detailes(pokimon_name)        
     if pokimon_detailes=={}:
         return ErrorHandling.the_param_incorrect("pokimon_name")
-        
+    pokimon_type = pokimon_detailes["types"];
+       
+    pokimon_id = pq.find_id_pokimon_by_name(pokimon_name);   
+
+    create_types_for_pokimon(pokimon_type,pokimon_id)     
+    
     new_pokimon =pc.create_pokimon(pokimon_detailes["id"],pokimon_detailes["name"],pokimon_detailes["height"],pokimon_detailes["weight"])
+    
     return new_pokimon     
         
         
@@ -144,13 +152,17 @@ async def evolve_pokimon(pokimon_name,trainer_name):
     try:
 
         pokimon_detailes = request_pokimon_detailes(pokimon_name)        
+        
         if pokimon_detailes=={}:
             return ErrorHandling.the_param_incorrect("pokimon_name") 
+        
         if(pq.find_if_trainer_has_pokimon_with_same_type(trainer_name,pokimon_name)):
             return ErrorHandling.the_same_type()
+       
         pokimon_evolution_chain_url = request_pokimon_evolotion_url(pokimon_detailes)
                         
         pokimon_evoulotion = request_evolotion_detailes(pokimon_evolution_chain_url)
+       
         the_evolve_name_of_pokimon = evolve_the_pokimon(pokimon_evoulotion,pokimon_name)
 
         if(the_evolve_name_of_pokimon!=0):          
@@ -166,6 +178,8 @@ async def evolve_pokimon(pokimon_name,trainer_name):
  
     except TypeError as e:
         return e;
+
+
 
 
 
