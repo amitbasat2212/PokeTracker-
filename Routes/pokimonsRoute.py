@@ -156,8 +156,14 @@ async def evolve_pokimon(pokimon_name,trainer_name):
         if pokimon_detailes=={}:
             return ErrorHandling.the_param_incorrect("pokimon_name") 
         
+        if(len(pq.find_pokimons_of_trainer(trainer_name))==0):
+            return ErrorHandling.there_is_not_pok_on_trainer()
+  
+
         if(pq.find_if_trainer_has_pokimon_with_same_type(trainer_name,pokimon_name)):
             return ErrorHandling.the_same_type()
+
+        
        
         pokimon_evolution_chain_url = request_pokimon_evolotion_url(pokimon_detailes)
                         

@@ -30,3 +30,9 @@ def the_row_dosent_excit():
         status_code=400,
         content={"message":f"the row dosent excit incorrect"},
 ) 
+
+def there_is_not_pok_on_trainer():
+    return JSONResponse(
+        status_code=400,
+        content={"message":f"the trainer does not have this pokimon"},
+) 

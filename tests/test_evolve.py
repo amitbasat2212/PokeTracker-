@@ -23,4 +23,8 @@ def test_evole_pokimon_wrong_pok():
     }
 
 def test_evolve_not_excit_pokimon():
-    pass;    
+     pokimon_wrong_evolve = evole()     
+     assert pokimon_wrong_evolve.status_code==400;
+     assert pokimon_wrong_evolve.json()=={
+        "message":f"the trainer does not have this pokimon"
+        }   
