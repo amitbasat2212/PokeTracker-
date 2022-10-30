@@ -156,15 +156,11 @@ async def evolve_pokimon(pokimon_name,trainer_name):
         if pokimon_detailes=={}:
             return ErrorHandling.the_param_incorrect("pokimon_name") 
         
-        if(len(pq.find_pokimons_of_trainer(trainer_name))==0):
+        if(pokimon_name not in pq.find_pokimons_of_trainer(trainer_name)):
             return ErrorHandling.there_is_not_pok_on_trainer()
-  
 
-        if(pq.find_if_trainer_has_pokimon_with_same_type(trainer_name,pokimon_name)):
-            return ErrorHandling.the_same_type()
 
-        
-       
+      
         pokimon_evolution_chain_url = request_pokimon_evolotion_url(pokimon_detailes)
                         
         pokimon_evoulotion = request_evolotion_detailes(pokimon_evolution_chain_url)
@@ -174,13 +170,13 @@ async def evolve_pokimon(pokimon_name,trainer_name):
         if(the_evolve_name_of_pokimon!=0):          
             delete_row = delete_old_pokimon_after_evolve(pokimon_name,trainer_name)        
             if(delete_row!={}):
-                pokimon_evolve_id=add_new_pokimon_after_evolve(the_evolve_name_of_pokimon,trainer_name)
+                add_new_pokimon_after_evolve(the_evolve_name_of_pokimon,trainer_name)
             else:
                 return ErrorHandling.the_row_dosent_excit();
         else:
              return ErrorHandling.the_evolve_finished();        
 
-        return {"trainer_name":trainer_name,"pokimon_id":pokimon_evolve_id}
+        return {"trainer_name":trainer_name,"pokimon_name":the_evolve_name_of_pokimon}
  
     except TypeError as e:
         return e;

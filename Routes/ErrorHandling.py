@@ -9,7 +9,7 @@ def params_incorrect(param1,param2):
 def the_same_type():
     return JSONResponse(
         status_code=400,
-        content={"message":f"the trainer alredy have one eith this type"},
+        content={"message":f"the trainer alredy have one with this type"},
 )     
 
 
